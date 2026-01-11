@@ -247,31 +247,31 @@ To make these results accessible without requiring users to re-run large experim
 <script>
     const DATASETS = {
       test: {
-        SSP: ["data"]
+        External: ["data"]
       },
       baseline: {
-        MSP: ["cost_0.0", "cost_0.001", "cost_0.002", "cost_0.003"],
-        SSP: ["cost_0.0", "cost_0.001", "cost_0.002", "cost_0.003"]
+        Local: ["cost_0.0", "cost_0.001", "cost_0.002", "cost_0.003"],
+        External: ["cost_0.0", "cost_0.001", "cost_0.002", "cost_0.003"]
       },
       heterogeneous_info: {
-        MSP: ["cost_0.002_latency_latency-aligned", "cost_0.002_latency_latency-misaligned"],
-        SSP: ["cost_0.002_latency_latency-aligned", "cost_0.002_latency_latency-misaligned"]
+        Local: ["cost_0.002_latency_latency-aligned", "cost_0.002_latency_latency-misaligned"],
+        External: ["cost_0.002_latency_latency-aligned", "cost_0.002_latency_latency-misaligned"]
       },
       heterogeneous_validator: {
-        MSP: ["cost_0.0_validators_heterogeneous", "cost_0.002_validators_heterogeneous"],
-        SSP: ["cost_0.0_validators_heterogeneous", "cost_0.002_validators_heterogeneous"]
+        Local: ["cost_0.0_validators_heterogeneous", "cost_0.002_validators_heterogeneous"],
+        External: ["cost_0.0_validators_heterogeneous", "cost_0.002_validators_heterogeneous"]
       },
       heterogeneous_both: {
-        MSP: ["cost_0.002_latency_latency-aligned", "cost_0.002_latency_latency-misaligned"],
-        SSP: ["cost_0.002_latency_latency-aligned", "cost_0.002_latency_latency-misaligned"]
+        Local: ["cost_0.002_latency_latency-aligned", "cost_0.002_latency_latency-misaligned"],
+        External: ["cost_0.002_latency_latency-aligned", "cost_0.002_latency_latency-misaligned"]
       },
       different_gammas: {
-        MSP: ["cost_0.002_gamma_0.3333", "cost_0.002_gamma_0.5", "cost_0.002_gamma_0.6667", "cost_0.002_gamma_0.8"],
-        SSP: ["cost_0.002_gamma_0.3333", "cost_0.002_gamma_0.5", "cost_0.002_gamma_0.6667", "cost_0.002_gamma_0.8"]
+        Local: ["cost_0.002_gamma_0.3333", "cost_0.002_gamma_0.5", "cost_0.002_gamma_0.6667", "cost_0.002_gamma_0.8"],
+        External: ["cost_0.002_gamma_0.3333", "cost_0.002_gamma_0.5", "cost_0.002_gamma_0.6667", "cost_0.002_gamma_0.8"]
       },
       eip7702: {
-        MSP: ["cost_0.002_delta_6000_cutoff_3000"],
-        SSP: ["cost_0.002_delta_6000_cutoff_3000"]
+        Local: ["cost_0.002_delta_6000_cutoff_3000"],
+        External: ["cost_0.002_delta_6000_cutoff_3000"]
       }
     };
 
@@ -330,7 +330,7 @@ To make these results accessible without requiring users to re-run large experim
 
   const TARGET_PAGE = 'viewer.html';
   function prefillDemo() {
-    document.getElementById('dataset').value = 'simulations/test/SSP/data/data.json';
+    document.getElementById('dataset').value = 'simulations/test/External/data/data.json';
     document.getElementById('theme').value = 'dark';
     document.getElementById('step').value = '10';
     document.querySelector('input[name="autoplay"][value="on"]').checked = true;
