@@ -17,39 +17,92 @@
   <style>
     /* ===== Minimal built-in styles so it looks good even without external CSS ===== */
     :root {
-      --bg1: #0f1226; --bg2: #171a36; --bg3: #0b0f22;
+      --bg1: #f6efe4;
+      --bg2: #eadbc6;
+      --bg3: #fbf7f1;
+      --fg: #1a1f1c;
+      --muted: #4f5a55;
+      --brand: #d38b45;
+      --brand-2: #caa06c;
+      --paper: rgba(255,255,255,0.78);
+      --paper-strong: rgba(26,31,28,0.08);
+      --shadow: 0 16px 36px rgba(20,24,22,0.16);
+      --accent-1: rgba(211,139,69,0.22);
+      --accent-2: rgba(203,162,112,0.2);
+      --accent-3: rgba(155,120,86,0.16);
       --grid-gap: 14px;
+    }
+    html.dark {
+      --bg1: #0f1f1b;
+      --bg2: #112926;
+      --bg3: #0a1715;
+      --fg: #f3f3ef;
+      --muted: #c6cbbf;
+      --brand: #f4b267;
+      --brand-2: #5fd0c3;
+      --paper: rgba(255,255,255,0.08);
+      --paper-strong: rgba(255,255,255,0.16);
+      --shadow: 0 18px 40px rgba(0,0,0,0.35);
+      --accent-1: rgba(244,178,103,0.18);
+      --accent-2: rgba(95,208,195,0.22);
+      --accent-3: rgba(63,134,123,0.18);
     }
     html, body {
       margin: 0; padding: 0; height: 100%;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      color: #0b1220;
+      font-family: "Plus Jakarta Sans", "Avenir Next", "Segoe UI", sans-serif;
+      color: var(--fg);
       background:
-        radial-gradient(1200px 800px at 20% 10%, #20265b 0%, transparent 60%),
-        radial-gradient(1000px 700px at 80% 20%, #103b5f 0%, transparent 60%),
-        radial-gradient(1200px 900px at 50% 100%, #1b3266 0%, transparent 60%),
-        linear-gradient(160deg, var(--bg1), var(--bg2) 40%, var(--bg3) 100%);
+        radial-gradient(900px 600px at 15% 15%, rgba(203,162,112,0.18) 0%, transparent 60%),
+        radial-gradient(1000px 700px at 85% 10%, rgba(211,139,69,0.16) 0%, transparent 60%),
+        radial-gradient(1100px 900px at 50% 100%, rgba(155,120,86,0.14) 0%, transparent 60%),
+        linear-gradient(160deg, var(--bg1), var(--bg2) 45%, var(--bg3) 100%);
       transition: color .3s ease, background .3s ease;
     }
-    html.dark, html.dark body { color: #e8eaf6; }
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.6;
+    }
+    body::before {
+      background:
+        linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.22) 45%, transparent 70%),
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.18) 0 1px, transparent 1px 7px);
+      mix-blend-mode: screen;
+    }
+    html.dark body::before {
+      background:
+        linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.05) 45%, transparent 70%),
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.04) 0 1px, transparent 1px 5px);
+    }
+    body::after {
+      background:
+        radial-gradient(450px 300px at 8% 85%, rgba(211,139,69,0.24) 0%, transparent 60%),
+        radial-gradient(520px 340px at 92% 70%, rgba(203,162,112,0.22) 0%, transparent 60%);
+      filter: blur(1px);
+    }
+    html.dark body::after {
+      background:
+        radial-gradient(450px 300px at 8% 85%, rgba(244,178,103,0.25) 0%, transparent 60%),
+        radial-gradient(520px 340px at 92% 70%, rgba(95,208,195,0.2) 0%, transparent 60%);
+    }
 
-    .wrap { min-height: 100%; padding: 16px; max-width: 1500px; margin: 0 auto; }
-    .toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-    input[type="range"] { flex: 1; }
+    .wrap { min-height: 100%; padding: 18px; max-width: 1500px; margin: 0 auto; position: relative; z-index: 1; }
+    .toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+    input[type="range"] { flex: 1; min-width: 180px; }
 
     .card {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 12px;
-      padding: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.20);
+      background: var(--paper);
+      border: 1px solid var(--paper-strong);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       color: inherit;
-    }
-    html.dark .card {
-      background: rgba(255,255,255,0.06);
-      border-color: rgba(255,255,255,0.16);
     }
 
     .grid {
@@ -59,24 +112,84 @@
       margin-top: 12px;
     }
     .card.plot { height: 360px; padding: 8px 8px 4px 8px; }
+    .card.plot.wide { grid-column: 1 / -1; }
     #globe { height: 620px; }
 
     button {
-      border: 0; border-radius: 12px; padding: 10px 16px;
+      border: 0; border-radius: 14px; padding: 10px 16px;
       font-weight: 700; letter-spacing: .3px; cursor: pointer;
-      color: #0b1220;
-      background: linear-gradient(135deg, #7aa2ff, #6ae3ff);
-      box-shadow: 0 8px 20px rgba(122,162,255,0.35);
-      transition: transform .08s ease, filter .2s ease;
+      color: #121916;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      box-shadow: 0 10px 22px rgba(10,20,16,0.2);
+      transition: transform .08s ease, filter .2s ease, box-shadow .2s ease;
     }
     button:hover { filter: brightness(1.05); }
     button:active { transform: translateY(1px); }
+    html:not(.dark) button {
+      color: #1a1f1c;
+      background: linear-gradient(135deg, #e4bc8a, #cf9b63);
+      box-shadow: 0 10px 18px rgba(140,98,58,0.22);
+    }
+    html:not(.dark) button:hover {
+      filter: brightness(1.03);
+      box-shadow: 0 12px 22px rgba(140,98,58,0.26);
+    }
 
     .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
     .brand .logo { width: 50px; height: 50px; border-radius: 12px; object-fit: contain;
-      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18); }
-    h1 { margin: 0; font-size: clamp(22px, 3vw, 32px); letter-spacing: .2px; }
-    .lead { margin: 6px 0 14px 0; opacity: .9; line-height: 1.6; }
+      background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.22); }
+    h1 { margin: 0; font-size: clamp(22px, 3vw, 34px); letter-spacing: .3px; font-family: "Fraunces", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif; }
+    .lead { margin: 6px 0 14px 0; color: var(--muted); line-height: 1.6; }
+
+    label { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: var(--fg); }
+    select {
+      border-radius: 12px;
+      border: 1px solid rgba(26,31,28,0.18);
+      padding: 8px 10px;
+      background: rgba(255,255,255,0.65);
+      color: inherit;
+    }
+    html.dark select {
+      border-color: rgba(255,255,255,0.22);
+      background: rgba(8,14,13,0.45);
+    }
+    select:focus {
+      outline: none;
+      border-color: var(--brand-2);
+      box-shadow: 0 0 0 3px rgba(95,208,195,0.2);
+    }
+    input[type="range"] {
+      appearance: none;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(26,31,28,0.15);
+      accent-color: var(--brand-2);
+    }
+    html.dark input[type="range"] { background: rgba(255,255,255,0.2); }
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--brand-2);
+      border: 2px solid rgba(255,255,255,0.8);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--brand-2);
+      border: 2px solid rgba(255,255,255,0.8);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
+    @media (max-width: 900px) {
+      .toolbar { gap: 10px; }
+      .toolbar .brand { width: 100%; }
+      #globe { height: 460px; }
+    }
   </style>
 </head>
 <body>
@@ -101,6 +214,7 @@
     <button id="export" style="margin-right: 4px;">⬇ Export</button>
     <button id="theme">🌓 Theme</button>
   </div>
+  <div id="desc" class="card lead" style="display:none"></div>
 
   <!-- Info -->
   <div id="info" class="card lead"></div>
@@ -122,7 +236,7 @@
     <div id="attest"     class="card plot"></div>
     <div id="failed"     class="card plot"></div>
     <div id="proposal"   class="card plot"></div>
-    <div id="relaydist"  class="card plot"></div>
+    <div id="relaydist"  class="card plot wide"></div>
   </div>
 </div>
 
@@ -136,21 +250,17 @@ function readSettings() {
   let ls = null;
   try { ls = JSON.parse(localStorage.getItem('app_settings') || 'null'); } catch (_) {}
 
-  const base = {
+    const base = {
     dataset: 'simulations/test/data.json',
     theme: 'auto',    // 'auto'|'light'|'dark'
     step: 1,
-    autoplay: false,
-    decimation: 5,    // border decimation
-    density_radius: 0.2
+    autoplay: false
   };
   const fromQS = {
     dataset: qs.get('dataset') || "data.json",
     theme: qs.get('theme') || undefined,
     step: qs.get('step') ? Number(qs.get('step')) : undefined,
-    autoplay: qs.get('autoplay') ? (qs.get('autoplay') === 'true') : undefined,
-    decimation: qs.get('decimation') ? Number(qs.get('decimation')) : undefined,
-    density_radius: qs.get('radius') ? Number(qs.get('radius')) : undefined
+    autoplay: qs.get('autoplay') ? (qs.get('autoplay') === 'true') : undefined
   };
   return Object.assign(base, ls || {}, fromQS);
 }
@@ -159,11 +269,63 @@ const SETTINGS = readSettings();
 let dark = (SETTINGS.theme === 'dark')
         || (SETTINGS.theme === 'auto' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
+function findParam(key, data) {
+  const containers = [data, data && data.meta, data && data.config, data && data.params, data && data.parameters];
+  for (const obj of containers) {
+    if (!obj || typeof obj !== 'object') continue;
+    if (key in obj) return obj[key];
+    const lowerKey = String(key).toLowerCase();
+    for (const k of Object.keys(obj)) {
+      if (String(k).toLowerCase() === lowerKey) return obj[k];
+    }
+  }
+  return null;
+}
+
+function formatParam(val) {
+  if (val == null || Number.isNaN(val)) return '—';
+  if (typeof val === 'number') return Number.isInteger(val) ? String(val) : String(val);
+  return String(val);
+}
+
+function updateSummaryPanel(data) {
+  const descEl = document.getElementById('desc');
+  if (!descEl) return;
+  const V = findParam('|V|', data) ?? findParam('V', data) ?? findParam('validators', data) ?? findParam('num_validators', data);
+  const N = findParam('N', data) ?? findParam('n', data) ?? findParam('num_nodes', data) ?? findParam('n_slots', data);
+  const delta = findParam('delta', data);
+  const cutoff = findParam('cutoff', data);
+  const cost = findParam('cost', data);
+  const gamma = findParam('gamma', data);
+  const summary = (data && (data.description || (data.meta && data.meta.description))) || '';
+
+  const values = [V, N, delta, cutoff, cost, gamma];
+  const hasConfig = values.some(v => v != null);
+  const hasSummary = Boolean(summary);
+  if (!hasConfig && !hasSummary) {
+    descEl.style.display = 'none';
+    return;
+  }
+
+  const configHTML = hasConfig ? `
+    <div style="display:flex;flex-wrap:wrap;gap:10px">
+      <span><b>Configuration</b></span>
+      <span><b>|V|:</b> ${formatParam(V)}</span>
+      <span><b>N:</b> ${formatParam(N)}</span>
+      <span><b>cost:</b> ${formatParam(cost)}</span>
+      <span><b>Δ:</b> ${formatParam(delta)} ms</span>
+      <span><b>cutoff:</b> ${formatParam(cutoff)} ms</span>
+      <span><b>γ:</b> ${formatParam(gamma)}</span>
+    </div>` : '';
+  const summaryHTML = hasSummary ? `<div style="margin-top:8px"><b>Summary:</b> ${summary}</div>` : '';
+  descEl.innerHTML = `${configHTML}${summaryHTML}`;
+  descEl.style.display = 'block';
+}
+
 /* ============================
    App State
    ============================ */
 let DATA = null;
-let WORLD_BORDER_TRACES = null;
 let playing = !!SETTINGS.autoplay;
 let slot = 0;
 let stepSize = SETTINGS.step || 1;
@@ -171,15 +333,12 @@ let stepSize = SETTINGS.step || 1;
 let nSlots = 1;
 let FULL_X = [0];
 
-let SPHERE = null;
-
-let RELAY_X = [], RELAY_Y = [], RELAY_Z = [];
+let RELAY_LAT = [], RELAY_LON = [];
 let RELAY_NAMES = [];
 
 let plotsReady = false;
 let globeReady = false;
 
-let RAW_GEOJSON = null;
 let RAW_GCP_CSV = null;
 let RAW_DATA_JSON = null;
 
@@ -191,22 +350,22 @@ function plotlyTheme(isDark, title = '', yTitle = '') {
   if (isDark) {
     return {
       title,
-      paper_bgcolor: '#1e1e1e',
-      plot_bgcolor:  '#1e1e1e',
-      font: { color: '#f0f0f0', size: 12 },
-      colorway: ['#60a5fa','#fbbf24','#34d399','#a78bfa','#f472b6'],
-      xaxis: { title: { text: 'Slot' }, gridcolor: '#444444', tickfont: { size: 11 } },
-      yaxis: { title: { text: yTitle }, gridcolor: '#444444', tickfont: { size: 11 } }
+      paper_bgcolor: '#101b18',
+      plot_bgcolor:  '#101b18',
+      font: { color: '#f3f3ef', size: 12 },
+      colorway: ['#f4b267','#5fd0c3','#f7d08a','#9ad4c7','#e6a59c'],
+      xaxis: { title: { text: 'Slot' }, gridcolor: '#2f3d38', tickfont: { size: 11 } },
+      yaxis: { title: { text: yTitle }, gridcolor: '#2f3d38', tickfont: { size: 11 } }
     };
   } else {
     return {
       title,
-      paper_bgcolor: 'rgba(255,255,255,0.7)',
-      plot_bgcolor:  'rgba(255,255,255,0.7)',
-      font: { color: '#0b1220', size: 12 },
-      colorway: ['#3b82f6','#f59e0b','#10b981','#8b5cf6','#ef4444'],
-      xaxis: { title: { text: 'Slot' }, gridcolor: '#e0e0e0', tickfont: { size: 11 } },
-      yaxis: { title: { text: yTitle }, gridcolor: '#e0e0e0', tickfont: { size: 11 } }
+      paper_bgcolor: 'rgba(244,239,229,0.75)',
+      plot_bgcolor:  'rgba(244,239,229,0.75)',
+      font: { color: '#1a1f1c', size: 12 },
+      colorway: ['#d89046','#2ea69a','#c97c5d','#6a9c7e','#9a7e6b'],
+      xaxis: { title: { text: 'Slot' }, gridcolor: '#d6d3c8', tickfont: { size: 11 } },
+      yaxis: { title: { text: yTitle }, gridcolor: '#d6d3c8', tickfont: { size: 11 } }
     };
   }
 }
@@ -214,66 +373,41 @@ function plotlyTheme(isDark, title = '', yTitle = '') {
 /* ============================
    Utilities
    ============================ */
-function linspace(a, b, n) {
-  const step = (b - a) / (n - 1);
-  return Array.from({length: n}, (_, i) => a + i * step);
+function extractCountry(location) {
+  if (!location) return 'Unknown';
+  const parts = String(location).split(',');
+  const last = parts[parts.length - 1];
+  return (last || 'Unknown').trim() || 'Unknown';
 }
 
-function sphereGrid(phiArr, thetaArr) {
-  const XS = [], YS = [], ZS = [];
-  for (let i = 0; i < thetaArr.length; i++) {
-    const rowX = [], rowY = [], rowZ = [];
-    for (let j = 0; j < phiArr.length; j++) {
-      const phi = phiArr[j], th = thetaArr[i];
-      rowX.push(Math.sin(phi) * Math.cos(th));
-      rowY.push(Math.sin(phi) * Math.sin(th));
-      rowZ.push(Math.cos(phi));
-    }
-    XS.push(rowX); YS.push(rowY); ZS.push(rowZ);
-  }
-  return {XS, YS, ZS};
-}
-
-function latlonToXYZ(latDeg, lonDeg) {
-  const phi = latDeg * Math.PI / 180;
-  const theta = lonDeg * Math.PI / 180;
-  return [Math.cos(phi) * Math.cos(theta), Math.cos(phi) * Math.sin(theta), Math.sin(phi)];
-}
-
-function decimate(coords, step) {
-  if (step <= 1) return coords;
-  const out = [];
-  for (let i = 0; i < coords.length; i += step) out.push(coords[i]);
-  if (coords.length && out[out.length - 1] !== coords[coords.length - 1]) out.push(coords[coords.length - 1]);
-  return out;
-}
-
-function calculateDensity(points, radius = 0.2) {
-    const n = points.length;
-    const densities = new Array(n).fill(0);
-    
-    // We use the square of the radius to avoid calculating Math.sqrt() 
-    // inside the loop, which significantly improves performance.
-    const thresholdSq = radius * radius;
-
-    for (let i = 0; i < n; i++) {
-        for (let j = i + 1; j < n; j++) {
-            // Calculate squared Euclidean distance between point i and point j
-            const dx = points[i][0] - points[j][0];
-            const dy = points[i][1] - points[j][1];
-            const dz = points[i][2] - points[j][2];
-            
-            const distSq = dx * dx + dy * dy + dz * dz;
-
-            // If the distance is within the threshold, increment density for both points
-            if (distSq <= thresholdSq) {
-                densities[i]++;
-                densities[j]++;
-            }
-        }
-    }
-    return densities;
-}
+const COUNTRY_ISO3 = {
+  USA: 'USA',
+  Japan: 'JPN',
+  India: 'IND',
+  Australia: 'AUS',
+  Germany: 'DEU',
+  Italy: 'ITA',
+  Canada: 'CAN',
+  'South Africa': 'ZAF',
+  Taiwan: 'TWN',
+  China: 'CHN',
+  'South Korea': 'KOR',
+  Singapore: 'SGP',
+  Indonesia: 'IDN',
+  Poland: 'POL',
+  Finland: 'FIN',
+  Sweden: 'SWE',
+  Spain: 'ESP',
+  Belgium: 'BEL',
+  UK: 'GBR',
+  Netherlands: 'NLD',
+  Switzerland: 'CHE',
+  France: 'FRA',
+  Qatar: 'QAT',
+  Israel: 'ISR',
+  Brazil: 'BRA',
+  Chile: 'CHL'
+};
 
 /* ============================
    Data loading
@@ -319,16 +453,19 @@ async function loadData() {
   RAW_DATA_JSON = await resp.text();
   DATA = JSON.parse(RAW_DATA_JSON);
 
+  updateSummaryPanel(DATA);
+
   DATA.gcpData = await loadGCPData();
 
-  const gcpXYZ = new Map();
+  const gcpLatLon = new Map();
   for (const [k, v] of DATA.gcpData.entries()) {
-    const x = Number(v.x), y = Number(v.y), z = Number(v.z);
-    if (Number.isFinite(x) && Number.isFinite(y) && Number.isFinite(z)) {
-      gcpXYZ.set(String(k), [x, y, z]);
+    const lat = Number(v['Nearest City Latitude']);
+    const lon = Number(v['Nearest City Longitude']);
+    if (Number.isFinite(lat) && Number.isFinite(lon)) {
+      gcpLatLon.set(String(k), [lat, lon]);
     }
   }
-  DATA.gcpXYZ = gcpXYZ;
+  DATA.gcpLatLon = gcpLatLon;
 
   nSlots = Math.max(
     1,
@@ -341,51 +478,16 @@ async function loadData() {
   document.getElementById('slider').max = String(Math.max(0, nSlots - 1));
 
   RELAY_NAMES = (DATA.sources || []).map(s => s[0]);
-  RELAY_X = []; RELAY_Y = []; RELAY_Z = [];
+  RELAY_LAT = []; RELAY_LON = [];
   for (const src of (DATA.sources || [])) {
     const region = String(src[1]);
-    const xyz = DATA.gcpXYZ.get(region);
-    if (xyz) {
-      RELAY_X.push(xyz[0]); RELAY_Y.push(xyz[1]); RELAY_Z.push(xyz[2]);
+    const ll = DATA.gcpLatLon.get(region);
+    if (ll) {
+      RELAY_LAT.push(ll[0]); RELAY_LON.push(ll[1]);
     } else {
-      RELAY_X.push(0); RELAY_Y.push(0); RELAY_Z.push(0);
+      RELAY_LAT.push(0); RELAY_LON.push(0);
     }
   }
-
-  const phi = linspace(0, Math.PI, 40), theta = linspace(0, 2*Math.PI, 80);
-  SPHERE = sphereGrid(phi, theta);
-}
-
-async function loadWorldBorders() {
-  if (WORLD_BORDER_TRACES) return WORLD_BORDER_TRACES;
-  const url = 'https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json';
-  const resp = await fetch(url, { cache: 'force-cache' });
-  if (!resp.ok) throw new Error('Failed to load countries.geo.json');
-  const gj = await resp.json();
-  RAW_GEOJSON = gj;
-
-  const tracesLight = [], tracesDark = [];
-  for (const feat of gj.features) {
-    const geom = feat.geometry;
-    if (!geom) continue;
-    const polys = (geom.type === 'Polygon') ? [geom.coordinates]
-                 : (geom.type === 'MultiPolygon') ? geom.coordinates : [];
-    for (const poly of polys) {
-      if (!poly.length) continue;
-      const ring = decimate(poly[0], SETTINGS.decimation || 5); // [[lon,lat], ...]
-      if (ring.length < 2) continue;
-      const xs = [], ys = [], zs = [];
-      for (const [lon, lat] of ring) {
-        const [x, y, z] = latlonToXYZ(lat, lon);
-        xs.push(x); ys.push(y); zs.push(z);
-      }
-      const base = { type: 'scatter3d', mode: 'lines', x: xs, y: ys, z: zs, hoverinfo: 'skip', showlegend: false };
-      tracesLight.push({ ...base, line: { width: 1, color: '#888'  } });
-      tracesDark .push({ ...base, line: { width: 1, color: '#aaaaaa' } });
-    }
-  }
-  WORLD_BORDER_TRACES = { light: tracesLight, dark: tracesDark };
-  return WORLD_BORDER_TRACES;
 }
 
 /* ============================
@@ -393,70 +495,82 @@ async function loadWorldBorders() {
    ============================ */
 function drawGlobe(i) {
   const { slots, meta, sources } = DATA;
-  const xs = [], ys = [], zs = [];
-  const pts = [];
+  const countryCounts = new Map();
   for (const [region, count] of (slots[i] || [])) {
-    const xyz = DATA.gcpXYZ.get(String(region));
-    if (!xyz) continue;
-
-    const x = xyz[0], y = xyz[1], z = xyz[2];
+    const row = DATA.gcpData && DATA.gcpData.get(String(region));
+    const country = extractCountry(row && row.location);
     const n = Number(count) || 0;
-    for (let k = 0; k < n; k++) {
-      xs.push(x); ys.push(y); zs.push(z);
-      pts.push([x, y, z]);
+    if (COUNTRY_ISO3[country]) {
+      countryCounts.set(country, (countryCounts.get(country) || 0) + n);
     }
   }
 
-  const dens = calculateDensity(pts, SETTINGS.density_radius || 0.2);
+  let maxCountryCount = 1;
+  for (const val of countryCounts.values()) {
+    if (val > maxCountryCount) maxCountryCount = val;
+  }
+
+  const locations = [];
+  const values = [];
+  const hoverText = [];
+  for (const [country, count] of countryCounts.entries()) {
+    const iso3 = COUNTRY_ISO3[country];
+    if (!iso3) continue;
+    locations.push(iso3);
+    values.push(count);
+    hoverText.push(`${country} • ${count} validators`);
+  }
 
   if (!globeReady) {
-    const validators = {
-      type: 'scatter3d', mode: 'markers',
-      x: xs, y: ys, z: zs,
-      marker: {
-        size: 4,
-        color: dens,
-        colorscale: dark ? 'Plasma' : 'Viridis',
-        showscale: true,
-        colorbar: {
-          title: 'Local Density', x: 1.15, len: 0.7,
-          titlefont: { color: dark ? '#f0f0f0' : '#0b1220' },
-          tickfont:  { color: dark ? '#f0f0f0' : '#0b1220' }
-        }
+    const countries = {
+      type: 'choropleth',
+      locations,
+      z: values,
+      text: hoverText,
+      locationmode: 'ISO-3',
+      colorscale: dark
+        ? [[0, '#17302b'], [0.35, '#2f7d74'], [0.7, '#86cbb9'], [1, '#f2b35d']]
+        : [[0, '#f2ece2'], [0.3, '#d9b488'], [0.65, '#b97744'], [1, '#8f5326']],
+      zmin: 0,
+      zmax: maxCountryCount,
+      showscale: true,
+      colorbar: {
+        title: { text: 'Number of validators', side: 'right' },
+        x: 1.12,
+        len: 0.7,
+        titlefont: { color: dark ? '#f0f0f0' : '#0b1220' },
+        tickfont:  { color: dark ? '#f0f0f0' : '#0b1220' }
       },
+      marker: { line: { color: dark ? '#2f3d38' : '#c8c2b8', width: 0.5 } },
+      hovertemplate: '%{text}<extra>Country</extra>',
       name: 'Validators'
     };
 
-    const sphere = {
-      type: 'surface', x: SPHERE.XS, y: SPHERE.YS, z: SPHERE.ZS, showscale: false, opacity: 0.2,
-      colorscale: [[0, dark ? '#444444' : 'lightblue'], [1, dark ? '#444444' : 'lightblue']],
-      hoverinfo: 'skip', name: 'Earth'
-    };
-
     const relays = {
-      type: 'scatter3d', mode: 'markers+text',
-      x: RELAY_X, y: RELAY_Y, z: RELAY_Z,
+      type: 'scattergeo', mode: 'markers',
+      lat: RELAY_LAT, lon: RELAY_LON,
       marker: { size: 10, color: 'red', symbol: 'diamond', line: { color: 'black', width: 1 } },
-      text: RELAY_NAMES, textposition: 'top center', name: 'Info Sources'
+      text: RELAY_NAMES,
+      hovertemplate: '%{text}<extra>Info Source</extra>',
+      name: 'Info Sources'
     };
 
-    const traces = [validators, sphere, relays];
-
-    const borders = dark ? WORLD_BORDER_TRACES.dark : WORLD_BORDER_TRACES.light;
-    traces.push(...borders);
+    const traces = [countries, relays];
 
     const layout = {
       ...plotlyTheme(dark, 'Geo Tracker', ''),
-      margin: { l: 15, r: 160, b: 20, t: 40 },
-      uirevision: 'keep-camera',
-      scene: {
-        xaxis: { range: [-1,1], backgroundcolor: dark ? '#1e1e1e' : 'rgba(255,255,255,0.7)',
-                 gridcolor: dark ? '#444444' : '#e0e0e0', showbackground: true, showgrid: true, showticklabels: false, zerolinecolor: dark ? '#666' : '#999' },
-        yaxis: { range: [-1,1], backgroundcolor: dark ? '#1e1e1e' : 'rgba(255,255,255,0.7)',
-                 gridcolor: dark ? '#444444' : '#e0e0e0', showbackground: true, showgrid: true, showticklabels: false, zerolinecolor: dark ? '#666' : '#999' },
-        zaxis: { range: [-1,1], backgroundcolor: dark ? '#1e1e1e' : 'rgba(255,255,255,0.7)',
-                 gridcolor: dark ? '#444444' : '#e0e0e0', showbackground: true, showgrid: true, showticklabels: false, zerolinecolor: dark ? '#666' : '#999' },
-        aspectmode: 'cube'
+      margin: { l: 15, r: 40, b: 20, t: 40 },
+      geo: {
+        projection: { type: 'natural earth' },
+        showland: true,
+        landcolor: dark ? '#15201d' : '#e7e1d6',
+        showocean: true,
+        oceancolor: dark ? '#0f1714' : '#f3f1ea',
+        showcountries: true,
+        countrycolor: dark ? '#2e3a36' : '#c8c2b8',
+        showcoastlines: true,
+        coastlinecolor: dark ? '#2e3a36' : '#c8c2b8',
+        bgcolor: 'rgba(0,0,0,0)'
       },
       showlegend: true,
       legend: { x: 0.02, y: 0.98, bgcolor: dark ? 'rgba(45,45,45,0.7)' : 'rgba(255,255,255,0.7)' }
@@ -468,8 +582,10 @@ function drawGlobe(i) {
   }
 
   Plotly.restyle('globe', {
-    x: [xs], y: [ys], z: [zs],
-    'marker.color': [dens]
+    locations: [locations],
+    z: [values],
+    zmax: [maxCountryCount],
+    text: [hoverText]
   }, [0]);
 }
 
@@ -506,11 +622,19 @@ function drawRelayDist(i) {
       const row = series[t];
       y[t] = (row && row[j] != null) ? row[j] : null;
     }
-    traces.push({ type: 'scatter', mode: 'lines', x: FULL_X, y, name: names[j] || `Source ${j}`, line: { width: 2 } });
+    traces.push({
+      type: 'scatter',
+      mode: 'lines',
+      x: FULL_X,
+      y,
+      name: names[j] || `Source ${j}`,
+      line: { width: 2 },
+      hovertemplate: '%{y}<extra>%{fullData.name}</extra>'
+    });
   }
 
   const layout = {
-    ...plotlyTheme(dark, 'Avg Distance to Info Sources', 'Avg. Distance'),
+    ...plotlyTheme(dark, 'Avg Distance to Info Sources', 'Avg. Distance to Info Sources'),
     height: h,
     margin: { l: 60, r: 20, t: 40, b: 40 },
     hovermode: 'x unified',
@@ -518,10 +642,10 @@ function drawRelayDist(i) {
       ...(plotlyTheme(dark, '', '').xaxis),
       autorange: false,
       range: [0, 0]
-    },
-    legend: { orientation: 'h', yanchor: 'top', y: -0.25, xanchor: 'center', x: 0.5, font: { size: 11 } }
+    }
   };
   Plotly.newPlot('relaydist', traces, layout, { displaylogo: false, responsive: true, displayModeBar: false });
+  Plotly.relayout('relaydist', { showlegend: false });
 }
 
 /* ============================
@@ -633,11 +757,6 @@ document.getElementById('export').onclick = async () => {
   try {
     zip.file("data.json", RAW_DATA_JSON || JSON.stringify(DATA, null, 2));
 
-    // Use the already fetched GeoJSON
-    if (RAW_GEOJSON) {
-      zip.file("countries.geo.json", JSON.stringify(RAW_GEOJSON, null, 2));
-    }
-
     if (RAW_GCP_CSV) {
       zip.file("gcp_regions.csv", RAW_GCP_CSV);
     }
@@ -669,8 +788,6 @@ document.getElementById('export').onclick = async () => {
   document.documentElement.classList.toggle('dark', dark);
 
   await loadData();
-  await loadWorldBorders();
-  
   drawAll();
 
   // Autoplay if requested
